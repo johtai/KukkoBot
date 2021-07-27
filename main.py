@@ -2,7 +2,7 @@ from telegram.ext import Updater
 from telegram.ext import CommandHandler
 import logging
 
-TELEGRAM_TOKEN = "1598899966:AAF-bvFOdrDX6yxwJQ4G-uBxBHikuV3_XQI"
+TELEGRAM_TOKEN = open("/res/token.txt", "r")
 
 #use_context - useful arg, =True needs for legacy code and old versions of the lib
 updater = Updater(token=TELEGRAM_TOKEN, use_context=False)
