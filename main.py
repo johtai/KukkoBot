@@ -65,7 +65,8 @@ def response(update, context):
 
 
 def help(update, context):
-    context.bot.send_message(chat_id=update.effective_chat.id, text="У меня есть несколкьо режимов общения:")
+    context.bot.send_message(chat_id=update.effective_chat.id, text="У меня есть несколкьо режимов общения:\n\
+        /wholesome - добрый\n/insult - злой")
 
 
 if __name__ == '__main__':
