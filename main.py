@@ -8,6 +8,10 @@ TELEGRAM_TOKEN = open("res/token.txt").read()
 "logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)"
 
 
+with open("res/response.txt") as r:
+    random_text = r.read()
+
+
 def main():
     updater = Updater(TELEGRAM_TOKEN, use_context=True)
     dp = updater.dispatcher
@@ -26,9 +30,9 @@ def start(update, context):
 
 
 def response(update, context):
-    print(update.message)
-    print("123")
-    print(update.message["chat"]["type"])
+    if update.message["chat"]["type"] != "private":
+        if random.randint(1, 100) > 10:
+            update.message.reply(random.choice(random_text))
 
 
 def help(update, context):
