@@ -1,6 +1,6 @@
 from telegram.ext import Updater, Filters
 from telegram.ext import CommandHandler, MessageHandler
-from telegram import ReplyKeyboardMarkup
+from telegram import ReplyKeyboardMarkup, InlineKeyboardMarkup
 import logging, random
 
 
@@ -33,40 +33,15 @@ def main():
 
 def start(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text="Привет, меня зовут Кукко. Я - многофункциональный бот. Буду рад помочь.", \
-        reply_markup=ReplyKeyboardMarkup([["/help"], ["/insult"], ["/wholesome"]], resize_keyboard=True))
-    context.chat_data["mode"] = "normal"
+        reply_markup=InlineKeyboardMarkup([["/help"]], resize_keyboard=True))
 
-
-def insult_f(update, context):
-    if context.chat_data["mode"] == "insult":
-        update.message.reply_text("Режим агрессивного общения уже установлен")
-    else:
-        update.message.reply_text("Осторожно. Это режим оскорблений и ненависти. Вам может быть неприятно")
-        context.chat_data["mode"] = "insult" 
-    
-
-def wholesome(update, context):
-    if context.chat_data["mode"] == "wholesome":
-        update.message.reply_text("Режим вежливого общения уже установлен")
-    else:
-        update.message.reply_text("Теперь я общаюсь вежливо")
-        context.chat_data["mode"] = "wholesome" 
-    
 
 def response(update, context):
-    if random.randint(1, 100) > 80:
-        if context.chat_data["mode"] == "normal":
-            update.message.reply_text("Скучно тут у вас")
-        if context.chat_data["mode"] == "insult":
-            update.message.reply_text(random.choice(insult))
-        elif context.chat_data["mode"] == "wholesome":
-            update.message.reply_text(random.choice(kind))
     print(context.chat_data)
 
 
 def help(update, context):
-    context.bot.send_message(chat_id=update.effective_chat.id, text="У меня есть несколкьо режимов общения:\n\
-        /wholesome - добрый\n/insult - злой")
+    context.bot.send_message(chat_id=update.effective_chat.id, text="safemode")
 
 
 if __name__ == '__main__':
