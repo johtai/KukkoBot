@@ -5,11 +5,10 @@ import logging, random
 
 
 TELEGRAM_TOKEN = open("res/token.txt").read()
-"logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)"
 
 
-with open("res/response.txt") as r:
-    random_text = r.read()
+with open('res/response.txt', 'r', encoding="utf-8") as f:
+    random_text  = (f.read()).split("\n")
 
 
 def main():
@@ -31,12 +30,12 @@ def start(update, context):
 
 def response(update, context):
     if update.message["chat"]["type"] != "private":
-        if random.randint(1, 100) > 10:
-            update.message.reply(random.choice(random_text))
+        if random.random() < 0.11:
+            update.message.reply_text(random.choice(random_text))
 
 
 def help(update, context):
-    context.bot.send_message(chat_id=update.effective_chat.id, text="safemode is running")
+    context.bot.send_message(chat_id=update.effective_chat.id, text="В обычном режиме я иногда отвечаю на ваши сообщения")
 
 
 if __name__ == '__main__':
