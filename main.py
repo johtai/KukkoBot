@@ -55,7 +55,7 @@ def response(update, context):
 
 
 def keyboard_callback_handler(update, context):
-    "Обработчик клавиатур"
+    # Обработчик клавиатур
 
     query = update.callback_query
     data = query.data
@@ -91,6 +91,10 @@ def sticker(update, context):
         update.message.reply_text("Крутой стикер, но у меня есть получше: https://t.me/addstickers/kukko_karelia")
 
 
+def about(update, context):
+    context.bot.send_message(chat_id=update.effective_chat.id, text='Если есть какие-то вопросы, пишите в личку: @karelo_finnish_ssr')
+
+
 def main():
     updater = Updater(TELEGRAM_TOKEN, use_context=True)
     dp = updater.dispatcher
@@ -99,6 +103,7 @@ def main():
     dp.add_handler(CommandHandler("help", help))
     dp.add_handler(CommandHandler("karelia", karelia))
     dp.add_handler(CommandHandler("mode", mode))
+    dp.add_handler(CommandHandler("about", about))
     dp.add_handler(CallbackQueryHandler(callback=keyboard_callback_handler))
     dp.add_handler(MessageHandler(Filters.text, response))
     dp.add_handler(MessageHandler(Filters.photo, response))
