@@ -9,6 +9,9 @@ TELEGRAM_TOKEN = open("res/token.txt").read()
 with open('res/response.txt', 'r', encoding="utf-8") as f:
     random_text  = (f.read()).split("\n")
 
+with open('res/direct_response.txt', 'r', encoding="utf-8") as f:
+    direct_response  = (f.read()).split("\n")
+
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     level=logging.INFO)
 
@@ -18,13 +21,26 @@ def start(update, context):
 
 
 def response(update, context):
-    if update.message["chat"]["type"] != "private":
-        if random.random() < 0.15:
-            update.message.reply_text(random.choice(random_text))
+    msg = update.message.text
+    #print(msg)
+
+    if len(msg) == 1 and random.random() < 0.1:
+        update.message.reply_text(f'{update.message.text} {random.choice(direct_response)}')
+    elif random.random() < 0.1:
+        update.message.reply_text(random.choice(random_text))
 
 
 def help(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text="В обычном режиме я иногда отвечаю на ваши сообщения")
+
+
+def karelia(update, context):
+    update.message.reply_text("Вы нашли пасхалку. Хайль Карелия! Voiten Kunnia! Слава Победе!")
+
+
+def sticker(update, context):
+    if random.random() < 0.15:
+        update.message.reply_text("Крутой стикер, но у меня есть получше: https://t.me/addstickers/kukko_karelia")
 
 
 def main():
@@ -33,7 +49,10 @@ def main():
 
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("help", help))
+    dp.add_handler(CommandHandler("karelia", karelia))
     dp.add_handler(MessageHandler(Filters.text, response))
+    dp.add_handler(MessageHandler(Filters.photo, response))
+    dp.add_handler(MessageHandler(Filters.sticker, sticker))
 
     updater.start_polling()
     print("Kukko is running")
