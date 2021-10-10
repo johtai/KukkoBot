@@ -4,27 +4,29 @@ from telegram import ReplyKeyboardMarkup, InlineKeyboardMarkup, KeyboardButton, 
 import logging, random, datetime
 
 
-#Получение токена и текста со случайными ответами
-TELEGRAM_TOKEN = open("res/token.txt").read()
-with open('res/response.txt', 'r', encoding="utf-8") as f:
-    insult_response  = (f.read()).split("\n")
+# Получение токена и текста со случайными ответами
+TELEGRAM_TOKEN = open('res/token.txt').read()
+with open('res/response.txt', 'r', encoding='utf-8') as f:
+    neutral_response  = f.read().split('\n')
 
-with open('res/direct_response.txt', 'r', encoding="utf-8") as f:
-    direct_response  = (f.read()).split("\n")
+with open('res/disprove.txt', 'r', encoding='utf-8') as f:
+    disprove_response  = f.read().split('\n')
 
-with open('res/kind.txt', 'r', encoding="utf-8") as f:
-    kind_response  = (f.read()).split("\n")
+with open('res/kind.txt', 'r', encoding='utf-8') as f:
+    kind_response  = f.read().split('\n')
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     level=logging.INFO)
+
+logger = logging.getLogger(__name__)
 
 
 def get_mode_keyboard():
     keyboard = [
         [
-            InlineKeyboardButton("Добрый", callback_data="kind"),
-            InlineKeyboardButton("Злой", callback_data="insult"),
-            InlineKeyboardButton("Рандом", callback_data="random"),
+            InlineKeyboardButton('Добрый', callback_data='kind'),
+            InlineKeyboardButton('Злой', callback_data='insult'),
+            InlineKeyboardButton('Рандом', callback_data='random'),
         ]
     ]
     return InlineKeyboardMarkup(keyboard)
@@ -32,12 +34,13 @@ def get_mode_keyboard():
 
 def start(update, context):
     context.chat_data['mode'] = 'insult'
-    context.bot.send_message(chat_id=update.effective_chat.id, text="Привет, меня зовут Кукко. Я — многофункциональный бот. Буду рад помочь")
+    context.chat_data['probability'] = 0.1
+    context.bot.send_message(chat_id=update.effective_chat.id, 
+                             text='Привет, меня зовут Кукко. Я — многофункциональный бот. Буду рад помочь')
 
 
 def response(update, context):
     msg = update.message.text
-    #print(msg)
 
     if random.random() < 0.1:
         if len(msg.split()) == 1 and context.chat_data['mode'] != 'kind':
@@ -63,7 +66,7 @@ def keyboard_callback_handler(update, context):
     chat_id = update.effective_chat.id
 
     context.chat_data['mode'] = data
-    query.message.edit_text(text=F'Режим сообщений был изменен на "{data}"')
+    query.message.edit_text(text=F'Режим сообщений был изменен на '{data}'')
 
 
 def mode(update, context):
@@ -79,16 +82,16 @@ def kind(update):
 
 
 def help(update, context):
-    context.bot.send_message(chat_id=update.effective_chat.id, text="В обычном режиме я иногда отвечаю на ваши сообщения")
+    context.bot.send_message(chat_id=update.effective_chat.id, text='В обычном режиме я иногда отвечаю на ваши сообщения')
 
 
 def karelia(update, context):
-    update.message.reply_text("Вы нашли пасхалку. Хайль Карелия! Voiten Kunnia! Слава Победе!")
+    update.message.reply_text('Вы нашли пасхалку. Хайль Карелия! Voiten Kunnia! Слава Победе!')
 
 
 def sticker(update, context):
     if random.random() < 0.15:
-        update.message.reply_text("Крутой стикер, но у меня есть получше: https://t.me/addstickers/kukko_karelia")
+        update.message.reply_text('Крутой стикер, но у меня есть получше: https://t.me/addstickers/kukko_karelia')
 
 
 def about(update, context):
@@ -99,18 +102,18 @@ def main():
     updater = Updater(TELEGRAM_TOKEN, use_context=True)
     dp = updater.dispatcher
 
-    dp.add_handler(CommandHandler("start", start))
-    dp.add_handler(CommandHandler("help", help))
-    dp.add_handler(CommandHandler("karelia", karelia))
-    dp.add_handler(CommandHandler("mode", mode))
-    dp.add_handler(CommandHandler("about", about))
+    dp.add_handler(CommandHandler('start', start))
+    dp.add_handler(CommandHandler('help', help))
+    dp.add_handler(CommandHandler('karelia', karelia))
+    dp.add_handler(CommandHandler('mode', mode))
+    dp.add_handler(CommandHandler('about', about))
     dp.add_handler(CallbackQueryHandler(callback=keyboard_callback_handler))
     dp.add_handler(MessageHandler(Filters.text, response))
     dp.add_handler(MessageHandler(Filters.photo, response))
     dp.add_handler(MessageHandler(Filters.sticker, sticker))
 
     updater.start_polling()
-    print("Kukko is running")
+    logger.info('Kukko is running')
     updater.idle()
 
 
