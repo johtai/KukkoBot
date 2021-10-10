@@ -24,10 +24,11 @@ def response(update, context):
     msg = update.message.text
     #print(msg)
 
-    if len(msg) == 1 and random.random() < 0.1:
-        update.message.reply_text(f'{update.message.text} {random.choice(direct_response)}')
-    elif random.random() < 0.1:
-        update.message.reply_text(random.choice(random_text))
+    if random.random() < 0.1:
+        if len(msg) == 1:
+            update.message.reply_text(f'{update.message.text} {random.choice(direct_response)}')
+        else:
+            update.message.reply_text(random.choice(random_text))
 
 
 def help(update, context):
