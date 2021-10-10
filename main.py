@@ -25,7 +25,7 @@ def response(update, context):
     #print(msg)
 
     if random.random() < 0.1:
-        if len(msg) == 1:
+        if len(msg.split()) == 1:
             update.message.reply_text(f'{update.message.text} {random.choice(direct_response)}')
         else:
             update.message.reply_text(random.choice(random_text))
