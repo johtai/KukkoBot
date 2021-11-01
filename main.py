@@ -4,10 +4,17 @@ from telegram import ReplyKeyboardMarkup, InlineKeyboardMarkup, KeyboardButton, 
 import logging, random, datetime
 
 
+<<<<<<< HEAD
 # Получение токена и текста со случайными ответами
 TELEGRAM_TOKEN = open('res/token.txt').read()
 with open('res/response.txt', 'r', encoding='utf-8') as f:
     neutral_response  = f.read().split('\n')
+=======
+#Получение токена и текста со случайными ответами
+TELEGRAM_TOKEN = open("res/token.txt").read().strip()
+with open('res/response.txt', 'r', encoding="utf-8") as f:
+    insult_response  = (f.read()).split("\n")
+>>>>>>> 0efabe0 (Add strip to token read)
 
 with open('res/disprove.txt', 'r', encoding='utf-8') as f:
     disprove_response  = f.read().split('\n')
