@@ -248,8 +248,8 @@ def main():
     dp.add_handler(MessageHandler(Filters.photo, photo))
     # dp.add_handler(MessageHandler(Filters.sticker, sticker))
 
-    timer = updater.job_queue
-    timer.run_repeating(callback_day, interval=60*60*10, first=60)
+    # timer = updater.job_queue
+    # timer.run_repeating(callback_day, interval=60*60*10, first=60)
 
     updater.start_polling()
     logger.info('Kukko is running')
